@@ -1,0 +1,32 @@
+{
+  "name": "social-feed-inputs",
+  "version": "0.1.0",
+  "description": "Helpers to normalize social feed inputs and resolve feed URLs for alerts and dashboards.",
+  "type": "module",
+  "license": "MIT",
+  "author": "vuguul",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vuguul/social-feed-inputs.git"
+  },
+  "keywords": [
+    "social",
+    "feeds",
+    "twitch",
+    "reddit",
+    "youtube",
+    "alerts"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "tsx --test tests/**/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
