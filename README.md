@@ -18,7 +18,7 @@ Bots and dashboards often need the same input cleanup rules for social alerts. T
 
 ## Author
 
-Built and published by [vuguul](https://github.com/vuguul).
+Built and published by Valaksi.
 
 ## License
 

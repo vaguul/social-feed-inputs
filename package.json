@@ -4,7 +4,7 @@
   "description": "Helpers to normalize social feed inputs and resolve feed URLs for alerts and dashboards.",
   "type": "module",
   "license": "MIT",
-  "author": "vuguul",
+  "author": "Valaksi",
   "repository": {
     "type": "git",
     "url": "https://github.com/vuguul/social-feed-inputs.git"
