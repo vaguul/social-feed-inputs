@@ -3,7 +3,7 @@
 ![CI](https://github.com/valaksi/social-feed-inputs/actions/workflows/ci.yml/badge.svg)
 ![MIT License](https://img.shields.io/badge/license-MIT-8fe3c7)
 
-Helpers to normalize user input and resolve feed URLs for social alert systems.
+Helpers to normalize user input and resolve feed URLs for social alert systems, maintained by Vaguul under the Zemiax personal software studio.
 
 ## Supported cases
 
@@ -37,7 +37,7 @@ npm test
 
 ## Author
 
-Built and published by Valaksi.
+Built and maintained by Vaguul for Zemiax.
 
 ## License
 
