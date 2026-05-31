@@ -1,6 +1,6 @@
 # social-feed-inputs
 
-![CI](https://github.com/valaksi/social-feed-inputs/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/vaguul/social-feed-inputs/actions/workflows/ci.yml/badge.svg)
 ![MIT License](https://img.shields.io/badge/license-MIT-8fe3c7)
 
 Helpers to normalize user input and resolve feed URLs for social alert systems, maintained by Vaguul under the Zemiax personal software studio.
