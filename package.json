@@ -1,10 +1,16 @@
 {
   "name": "social-feed-inputs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Helpers to normalize social feed inputs and resolve feed URLs for alerts and dashboards.",
   "type": "module",
   "license": "MIT",
   "author": "Valaksi",
+  "sideEffects": false,
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/valaksi/social-feed-inputs.git"
