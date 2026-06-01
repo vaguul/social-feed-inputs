@@ -12,6 +12,45 @@ Helpers to normalize user input and resolve feed URLs for social alert systems, 
 - Reddit subreddits and users
 - generic RSS-backed social sources
 
+## Provider support matrix
+
+| Provider input | Stored provider | Accepted input example | Normalized output example |
+| --- | --- | --- | --- |
+| YouTube | `youtube` | `UC_x5XG1OV2P6uZZ5FSM9Ttw` | `https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw` |
+| Twitch | `twitch` | `https://www.twitch.tv/Shroud` | `https://api.twitch.tv/helix/streams?user_login=shroud` |
+| Reddit subreddit | `reddit` | `r/typescript` | `https://www.reddit.com/r/typescript/new.json?limit=10&raw_json=1` |
+| Generic RSS-backed source | `rss` | `https://example.com/feeds/announcements.xml` | `https://example.com/feeds/announcements.xml` |
+
+## Normalization examples
+
+### YouTube
+
+- Valid input: `https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw`
+- Stored provider: `youtube`
+- Normalized feed URL: `https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw`
+
+### Twitch
+
+- Valid input: `https://www.twitch.tv/Shroud`
+- Stored provider: `twitch`
+- Normalized stream URL: `https://api.twitch.tv/helix/streams?user_login=shroud`
+
+### Reddit subreddit
+
+- Valid input: `r/typescript`
+- Stored provider: `reddit`
+- Normalized feed URL: `https://www.reddit.com/r/typescript/new.json?limit=10&raw_json=1`
+
+### Generic RSS-backed sources
+
+Use these providers when the source itself is not normalized by this package and
+the caller already has a stable feed URL.
+
+- Valid input label: `Instagram`
+- Valid feed URL: `https://example.com/feeds/announcements.xml`
+- Stored provider: `rss`
+- Normalized feed URL: `https://example.com/feeds/announcements.xml`
+
 ## Why this exists
 
 Bots and dashboards often need the same input cleanup rules for social alerts. This package keeps the normalization and feed-resolution logic in one reusable place.
