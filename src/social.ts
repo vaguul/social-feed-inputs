@@ -25,12 +25,21 @@ export function normalizeYouTubeChannelId(value: string) {
 }
 
 export function normalizeRedditSubreddit(value: string) {
-  const candidate = value.trim().replace(/^r\//i, "").replace(/^\/r\//i, "").replace(/\/+$/, "");
+  const trimmed = value.trim();
+  const urlCandidate = getRedditPathSegment(trimmed, ["r"]);
+  const candidate = (urlCandidate ?? trimmed).replace(/^r\//i, "").replace(/^\/r\//i, "").replace(/\/+$/, "");
   return REDDIT_SUBREDDIT_PATTERN.test(candidate) ? candidate : null;
 }
 
 export function normalizeRedditUser(value: string) {
-  const candidate = value.trim().replace(/^u\//i, "").replace(/^\/u\//i, "").replace(/^user\//i, "").replace(/^\/user\//i, "").replace(/\/+$/, "");
+  const trimmed = value.trim();
+  const urlCandidate = getRedditPathSegment(trimmed, ["u", "user"]);
+  const candidate = (urlCandidate ?? trimmed)
+    .replace(/^u\//i, "")
+    .replace(/^\/u\//i, "")
+    .replace(/^user\//i, "")
+    .replace(/^\/user\//i, "")
+    .replace(/\/+$/, "");
   return REDDIT_USER_PATTERN.test(candidate) ? candidate : null;
 }
 
@@ -99,4 +108,24 @@ export function renderSocialAlertTemplate(
     .replaceAll("{title}", context.title)
     .replaceAll("{url}", context.url)
     .replaceAll("{published_at}", context.publishedAt ?? "");
+}
+
+function getRedditPathSegment(value: string, prefixes: string[]) {
+  if (!isValidUrl(value)) {
+    return null;
+  }
+
+  const url = new URL(value);
+
+  if (url.hostname !== "reddit.com" && !url.hostname.endsWith(".reddit.com")) {
+    return null;
+  }
+
+  const [kind, segment] = url.pathname.split("/").filter(Boolean);
+
+  if (!kind || !prefixes.includes(kind.toLowerCase()) || !segment) {
+    return null;
+  }
+
+  return segment;
 }

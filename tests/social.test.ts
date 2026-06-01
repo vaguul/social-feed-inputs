@@ -12,11 +12,15 @@ import {
 test("normalizeRedditSubreddit accepts r/ prefix and trims slashes", () => {
   assert.equal(normalizeRedditSubreddit("r/discordapp/"), "discordapp");
   assert.equal(normalizeRedditSubreddit("/r/typescript"), "typescript");
+  assert.equal(normalizeRedditSubreddit("https://old.reddit.com/r/selfhosted/?sort=new"), "selfhosted");
+  assert.equal(normalizeRedditSubreddit("https://example.com/r/selfhosted"), null);
 });
 
 test("normalizeRedditUser accepts u/ and user/ prefixes", () => {
   assert.equal(normalizeRedditUser("u/spez"), "spez");
   assert.equal(normalizeRedditUser("/user/example_user"), "example_user");
+  assert.equal(normalizeRedditUser("https://www.reddit.com/user/example_user/?sort=new"), "example_user");
+  assert.equal(normalizeRedditUser("https://example.com/user/example_user"), null);
 });
 
 test("reddit feed builders generate JSON listing URLs", () => {

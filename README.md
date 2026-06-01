@@ -18,7 +18,7 @@ Helpers to normalize user input and resolve feed URLs for social alert systems, 
 | --- | --- | --- | --- |
 | YouTube | `youtube` | `UC_x5XG1OV2P6uZZ5FSM9Ttw` | `https://www.youtube.com/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw` |
 | Twitch | `twitch` | `https://www.twitch.tv/Shroud` | `https://api.twitch.tv/helix/streams?user_login=shroud` |
-| Reddit subreddit | `reddit` | `r/typescript` | `https://www.reddit.com/r/typescript/new.json?limit=10&raw_json=1` |
+| Reddit subreddit | `reddit` | `https://www.reddit.com/r/typescript/?sort=new` | `https://www.reddit.com/r/typescript/new.json?limit=10&raw_json=1` |
 | Generic RSS-backed source | `rss` | `https://example.com/feeds/announcements.xml` | `https://example.com/feeds/announcements.xml` |
 
 ## Normalization examples
@@ -38,6 +38,7 @@ Helpers to normalize user input and resolve feed URLs for social alert systems, 
 ### Reddit subreddit
 
 - Valid input: `r/typescript`
+- Valid URL input: `https://www.reddit.com/r/typescript/?sort=new`
 - Stored provider: `reddit`
 - Normalized feed URL: `https://www.reddit.com/r/typescript/new.json?limit=10&raw_json=1`
 
@@ -50,6 +51,10 @@ the caller already has a stable feed URL.
 - Valid feed URL: `https://example.com/feeds/announcements.xml`
 - Stored provider: `rss`
 - Normalized feed URL: `https://example.com/feeds/announcements.xml`
+
+Provider-specific parsers do not guess across unsupported domains. For example,
+`https://example.com/r/typescript` is rejected as a subreddit input instead of
+being treated as Reddit.
 
 ## Why this exists
 
