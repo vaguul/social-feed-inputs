@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.1.4 - 2026-06-04
+
+- Added explicit `rootDir` to the package build config for TypeScript 6 compatibility in CI.
+- Updated the GitHub release tag install example to the latest release.
+
 ## v0.1.3 - 2026-06-04
 
 - Changed package exports to compiled `dist` files for real package consumption.

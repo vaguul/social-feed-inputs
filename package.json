@@ -1,6 +1,6 @@
 {
   "name": "social-feed-inputs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Zemiax helpers to normalize social feed inputs and resolve feed URLs for alerts and dashboards.",
   "type": "module",
   "license": "MIT",
