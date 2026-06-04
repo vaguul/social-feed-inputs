@@ -1,13 +1,13 @@
 {
   "name": "social-feed-inputs",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Zemiax helpers to normalize social feed inputs and resolve feed URLs for alerts and dashboards.",
   "type": "module",
   "license": "MIT",
   "author": "Vaguul (Zemiax)",
   "sideEffects": false,
   "files": [
-    "src",
+    "dist",
     "README.md",
     "LICENSE"
   ],
@@ -24,11 +24,16 @@
     "alerts"
   ],
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./dist/index.js"
   },
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "validate": "npm run typecheck && npm test",
     "test": "tsx --test tests/**/*.test.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepare": "npm run build",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

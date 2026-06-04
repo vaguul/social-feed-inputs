@@ -62,6 +62,14 @@ Bots and dashboards often need the same input cleanup rules for social alerts. T
 
 ## Install
 
+Install from a GitHub release tag:
+
+```bash
+npm install github:vaguul/social-feed-inputs#v0.1.3
+```
+
+Local development:
+
 ```bash
 npm install
 ```
