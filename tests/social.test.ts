@@ -4,6 +4,8 @@ import {
   buildRedditSubredditFeedUrl,
   buildRedditUserFeedUrl,
   buildTwitchStreamsUrl,
+  decodeBasicHtmlEntities,
+  extractYouTubeChannelIdFromFeedUrl,
   normalizeRedditSubreddit,
   normalizeRedditUser,
   normalizeTwitchLogin
@@ -31,6 +33,21 @@ test("reddit feed builders generate JSON listing URLs", () => {
 test("normalizeTwitchLogin accepts plain login and twitch URLs", () => {
   assert.equal(normalizeTwitchLogin("shroud"), "shroud");
   assert.equal(normalizeTwitchLogin("https://www.twitch.tv/Shroud"), "shroud");
+  assert.equal(normalizeTwitchLogin("https://twitch.tv.example.com/Shroud"), null);
+});
+
+test("YouTube feed parsing rejects lookalike hostnames", () => {
+  assert.equal(
+    extractYouTubeChannelIdFromFeedUrl(
+      "https://youtube.com.example.org/feeds/videos.xml?channel_id=UC_x5XG1OV2P6uZZ5FSM9Ttw"
+    ),
+    null
+  );
+});
+
+test("HTML entity decoding performs exactly one pass", () => {
+  assert.equal(decodeBasicHtmlEntities("&lt;title&gt; &amp; &#39;ok&#39;"), "<title> & 'ok'");
+  assert.equal(decodeBasicHtmlEntities("&amp;lt;"), "&lt;");
 });
 
 test("buildTwitchStreamsUrl targets the Helix streams endpoint", () => {
