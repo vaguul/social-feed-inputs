@@ -27,19 +27,14 @@ export function normalizeYouTubeChannelId(value: string) {
 export function normalizeRedditSubreddit(value: string) {
   const trimmed = value.trim();
   const urlCandidate = getRedditPathSegment(trimmed, ["r"]);
-  const candidate = (urlCandidate ?? trimmed).replace(/^r\//i, "").replace(/^\/r\//i, "").replace(/\/+$/, "");
+  const candidate = stripTrailingSlashes(stripPathPrefix(urlCandidate ?? trimmed, ["r"]));
   return REDDIT_SUBREDDIT_PATTERN.test(candidate) ? candidate : null;
 }
 
 export function normalizeRedditUser(value: string) {
   const trimmed = value.trim();
   const urlCandidate = getRedditPathSegment(trimmed, ["u", "user"]);
-  const candidate = (urlCandidate ?? trimmed)
-    .replace(/^u\//i, "")
-    .replace(/^\/u\//i, "")
-    .replace(/^user\//i, "")
-    .replace(/^\/user\//i, "")
-    .replace(/\/+$/, "");
+  const candidate = stripTrailingSlashes(stripPathPrefix(urlCandidate ?? trimmed, ["u", "user"]));
   return REDDIT_USER_PATTERN.test(candidate) ? candidate : null;
 }
 
@@ -52,13 +47,15 @@ export function buildRedditUserFeedUrl(userName: string) {
 }
 
 export function normalizeTwitchLogin(value: string) {
-  const candidate = value
-    .trim()
-    .replace(/^@/, "")
-    .replace(/^https?:\/\/(www\.)?twitch\.tv\//i, "")
-    .replace(/^\/+/, "")
-    .replace(/\/+$/, "")
-    .split(/[/?#]/)[0];
+  const trimmed = value.trim();
+  const urlCandidate = getTwitchPathSegment(trimmed);
+
+  if (isValidUrl(trimmed) && urlCandidate === null) {
+    return null;
+  }
+
+  const source = urlCandidate ?? (trimmed.startsWith("@") ? trimmed.slice(1) : trimmed);
+  const candidate = stripLeadingSlashes(source).split(/[/?#]/, 1)[0] ?? "";
 
   return TWITCH_LOGIN_PATTERN.test(candidate) ? candidate.toLowerCase() : null;
 }
@@ -78,7 +75,7 @@ export function extractYouTubeChannelIdFromFeedUrl(feedUrl: string) {
 
   const url = new URL(feedUrl);
 
-  if (!url.hostname.includes("youtube.com")) {
+  if (!isHostnameOrSubdomain(url.hostname, "youtube.com")) {
     return null;
   }
 
@@ -86,12 +83,15 @@ export function extractYouTubeChannelIdFromFeedUrl(feedUrl: string) {
 }
 
 export function decodeBasicHtmlEntities(value: string) {
-  return value
-    .replaceAll("&amp;", "&")
-    .replaceAll("&lt;", "<")
-    .replaceAll("&gt;", ">")
-    .replaceAll("&quot;", "\"")
-    .replaceAll("&#39;", "'");
+  const entities: Record<string, string> = {
+    "&amp;": "&",
+    "&lt;": "<",
+    "&gt;": ">",
+    "&quot;": "\"",
+    "&#39;": "'"
+  };
+
+  return value.replace(/&(amp|lt|gt|quot|#39);/g, (entity) => entities[entity] ?? entity);
 }
 
 export function renderSocialAlertTemplate(
@@ -117,7 +117,7 @@ function getRedditPathSegment(value: string, prefixes: string[]) {
 
   const url = new URL(value);
 
-  if (url.hostname !== "reddit.com" && !url.hostname.endsWith(".reddit.com")) {
+  if (!isHostnameOrSubdomain(url.hostname, "reddit.com")) {
     return null;
   }
 
@@ -128,4 +128,52 @@ function getRedditPathSegment(value: string, prefixes: string[]) {
   }
 
   return segment;
+}
+
+function getTwitchPathSegment(value: string) {
+  if (!isValidUrl(value)) {
+    return null;
+  }
+
+  const url = new URL(value);
+
+  if (!isHostnameOrSubdomain(url.hostname, "twitch.tv")) {
+    return null;
+  }
+
+  return url.pathname.split("/").find(Boolean) ?? null;
+}
+
+function isHostnameOrSubdomain(hostname: string, domain: string) {
+  return hostname === domain || hostname.endsWith(`.${domain}`);
+}
+
+function stripPathPrefix(value: string, prefixes: string[]) {
+  const candidate = stripLeadingSlashes(value);
+  const lowerCandidate = candidate.toLowerCase();
+
+  for (const prefix of prefixes) {
+    const marker = `${prefix.toLowerCase()}/`;
+    if (lowerCandidate.startsWith(marker)) {
+      return candidate.slice(marker.length);
+    }
+  }
+
+  return candidate;
+}
+
+function stripLeadingSlashes(value: string) {
+  let index = 0;
+  while (value[index] === "/") {
+    index += 1;
+  }
+  return value.slice(index);
+}
+
+function stripTrailingSlashes(value: string) {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === "/") {
+    end -= 1;
+  }
+  return value.slice(0, end);
 }
